@@ -4,431 +4,494 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project KiWI - The Future of Farming</title>
- 
+
     <!-- Google Fonts: Inter for a clean, modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
- 
+
     <!-- Phosphor Icons for a modern aesthetic -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
- 
+
     <!-- Three.js CDN for 3D animation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
- 
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Prevent scrolling due to the fixed canvas */
+            overflow: hidden;
+            color: #1E293B; /* Dark text for light background */
+            background-color: #F7F8F9; /* Off-white background */
+            cursor: none; /* Hide default cursor */
         }
 
-        /* Gradient for the main title text */
-        .title-gradient {
-            background-image: linear-gradient(to right, #14b8a6, #3b82f6, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Full-screen canvas for the 3D background */
-        canvas {
+        /* Custom cursor with a futuristic glow effect */
+        .cursor-glow {
             position: fixed;
-            top: 0;
-            left: 0;
-            display: block;
-            z-index: -1;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.7); /* Green glow */
+            box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e, 0 0 30px #22c55e;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.2s ease-out;
+            opacity: 0.8;
         }
 
-        /* Main content container with a futuristic frosted glass effect */
-        .main-content {
-            background-color: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 8px 60px rgba(0, 0, 0, 0.1);
-            transform: scale(0.95);
-            opacity: 0;
+        /* Glassmorphism effect for panels */
+        .glass-panel {
+            background: rgba(220, 252, 231, 0.4); /* Light green tint */
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid rgba(134, 239, 172, 0.3); /* Lighter green border */
+            border-radius: 2rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Pre-loader for a smooth transition */
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f1f5f9;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1s ease-out;
+        /* Holographic text effect for titles */
+        .holographic-text {
+            text-shadow: 0 0 5px #22c55e, 0 0 10px #4ade80, 0 0 15px #86efac;
+            animation: text-pulse 4s ease-in-out infinite;
         }
-        .preloader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        .preloader .loader-text {
-            font-size: 2rem;
-            font-weight: 700;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
+        @keyframes text-pulse {
+            0%, 100% { text-shadow: 0 0 5px #22c55e, 0 0 10px #4ade80, 0 0 15px #86efac; }
+            50% { text-shadow: 0 0 8px #22c55e, 0 0 15px #4ade80, 0 0 25px #86efac; }
         }
 
-        /* Animated border for buttons */
-        .animated-border {
+        /* Animated holographic border for interactive elements */
+        .holographic-border {
             position: relative;
             z-index: 10;
             overflow: hidden;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
         }
-        .animated-border::before {
+        .holographic-border::before {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, #14b8a6, #3b82f6, #6366f1, #c084fc, #ec4899, #f97316);
+            background: linear-gradient(45deg, #16a34a, #22c55e, #4ade80, #86efac, #a7f3d0, #facc15);
             background-size: 400%;
-            animation: gradient-flow 15s ease infinite;
+            animation: gradient-flow 20s linear infinite;
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.3;
             transition: opacity 0.3s ease;
         }
-        .animated-border:hover::before {
+        .holographic-border:hover::before {
             animation-play-state: paused;
-            opacity: 1;
+            opacity: 0.8;
         }
         @keyframes gradient-flow {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .animated-border::after {
+        .holographic-border::after {
             content: '';
             position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: #f1f5f9;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: #F7F8F9; /* Off-white background */
             border-radius: inherit;
             z-index: -1;
         }
-        
-        .animated-border:hover {
+        .holographic-border:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.4);
         }
 
-        /* Modal styling */
+        /* Modal styling with a more refined glassmorphism look */
         .modal {
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 8px 60px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            transform: translateY(20px);
+            transform: scale(0.95) translateY(20px);
             opacity: 0;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .modal.open {
-            transform: translateY(0);
+            transform: scale(1) translateY(0);
             opacity: 1;
         }
 
+        /* AI Chatbot container */
+        #ai-avatar-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+            width: 80px;
+            height: 80px;
+            animation: floating 5s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #ai-avatar-container:hover {
+            transform: scale(1.1) translateY(-10px);
+        }
+
+        #ai-dialogue {
+            position: fixed;
+            bottom: 6rem;
+            right: 8rem;
+            padding: 1rem;
+            max-width: 300px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            color: #1E293B; /* Dark text for the modal */
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #F7F8F9; /* Off-white background */
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 1s ease-out;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-glow {
+            font-size: 2rem;
+            font-weight: 900;
+            text-shadow: 0 0 5px #22c55e, 0 0 10px #22c55e, 0 0 15px #22c55e;
+            animation: preloader-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes preloader-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-slate-800 flex items-center justify-center min-h-screen">
+<body class="bg-gray-50 text-slate-800">
 
-    <!-- Preloader -->
+    <!-- Preloader with glowing text -->
     <div id="preloader" class="preloader">
-        <h2 class="loader-text title-gradient">Loading KiWI Ecosystem...</h2>
+        <h2 class="loader-glow">Engaging System...</h2>
+        <p class="text-sm text-slate-500 mt-4">Initializing neural network and holographic interface...</p>
     </div>
 
-    <!-- The three.js canvas will be injected here by JavaScript -->
-    <canvas id="three-canvas"></canvas>
+    <!-- The Three.js canvas will be injected here -->
+    <canvas id="three-canvas" class="fixed inset-0 z-0"></canvas>
 
-    <!-- Main content container -->
-    <div id="main-content" class="main-content max-w-5xl w-full p-6 sm:p-10 text-center rounded-3xl z-10">
+    <!-- Custom glowing cursor -->
+    <div id="cursor-glow" class="cursor-glow"></div>
+
+    <!-- Main Content Area -->
+    <div id="main-content" class="absolute inset-0 flex flex-col justify-center items-center text-center opacity-0 transition-opacity duration-1000 ease-out z-10 p-4 sm:p-8">
         
-        <!-- Header section -->
-        <header class="mb-12 sm:mb-16">
-            <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-4 title-gradient">
+        <!-- Header Panel with holographic text -->
+        <header class="glass-panel p-8 md:p-12 max-w-4xl w-full rounded-3xl mb-12">
+            <h1 id="main-title" class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-4 holographic-text">
                 Project KiWI
             </h1>
-            <p class="text-xl sm:text-2xl text-slate-700 max-w-3xl mx-auto mb-6">
-                Connecting Fields to the Future: Intelligent, Inclusive, and Sustainable Agriculture.
+            <p class="text-lg sm:text-xl text-slate-700 max-w-2xl mx-auto mb-6">
+                A decentralized agricultural intelligence ecosystem. We are redefining farming through a symbiotic fusion of technology and nature.
             </p>
-            <p class="text-base text-slate-500 max-w-3xl mx-auto">
-                A unified ecosystem modernizing farming through digital tools, AI-powered insights, and a farmer-first approach.
+            <p class="text-sm text-slate-600 max-w-2xl mx-auto">
+                <span class="font-bold">Status:</span> Live & Thriving.
             </p>
         </header>
 
-        <!-- Main call-to-action buttons -->
-        <main class="mb-16">
-            <h2 class="text-xl sm:text-2xl font-bold mb-8 text-slate-700">Select your role to begin:</h2>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 w-full px-2">
-                
-                <!-- Consumer Button -->
-                <a href="https://krishisangam.odoo.com/"
-                    title="Go to Krishi Sangam (Consumer Portal)"
-                    class="animated-border w-full sm:w-1/2 flex flex-col items-center justify-center px-8 py-10 rounded-3xl shadow-xl">
-                    <span class="text-5xl mb-4 text-emerald-600"><i class="ph-fill ph-storefront"></i></span>
-                    <span class="text-xl sm:text-2xl font-bold text-slate-800">I'm a Consumer</span>
-                    <span class="block text-sm text-slate-500 mt-2">Discover and purchase local produce.</span>
-                </a>
+        <!-- Interactive Panels Container (drag-and-drop enabled) -->
+        <main class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 w-full max-w-5xl px-2 mb-16">
+            
+            <!-- Farmer Portal Panel -->
+            <a href="https://krishidwaar.odoo.com/"
+                title="Go to Krishi Dwaar (Farmer Portal)"
+                class="holographic-border w-full sm:w-1/2 flex flex-col items-center justify-center p-8 rounded-3xl text-center">
+                <span class="text-4xl sm:text-5xl mb-4 text-emerald-600"><i class="ph-fill ph-tractor"></i></span>
+                <span class="text-xl sm:text-2xl font-bold text-slate-800">Farmer Interface</span>
+                <span class="block text-sm text-slate-600 mt-2">Access your digital twin farm, optimize yield, and trade globally.</span>
+            </a>
 
-                <!-- Farmer Button -->
-                <a href="https://krishidwaar.odoo.com/"
-                    title="Go to Krishi Dwaar (Farmer Portal)"
-                    class="animated-border w-full sm:w-1/2 flex flex-col items-center justify-center px-8 py-10 rounded-3xl shadow-xl">
-                    <span class="text-5xl mb-4 text-blue-600"><i class="ph-fill ph-tractor"></i></span>
-                    <span class="text-xl sm:text-2xl font-bold text-slate-800">I'm a Farmer</span>
-                    <span class="block text-sm text-slate-500 mt-2">Manage your farm and sell your goods directly.</span>
-                </a>
-            </div>
+            <!-- Consumer Portal Panel -->
+            <a href="https://krishisangam.odoo.com/"
+                title="Go to Krishi Sangam (Consumer Portal)"
+                class="holographic-border w-full sm:w-1/2 flex flex-col items-center justify-center p-8 rounded-3xl text-center">
+                <span class="text-4xl sm:text-5xl mb-4 text-emerald-600"><i class="ph-fill ph-storefront"></i></span>
+                <span class="text-xl sm:text-2xl font-bold text-slate-800">Consumer Hub</span>
+                <span class="block text-sm text-slate-600 mt-2">Trace every nutrient from seed to your table, supporting local growers.</span>
+            </a>
         </main>
-        
-        <!-- More Info Button -->
-        <button id="more-info-btn" class="text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors duration-300">
-            More about Project KiWI
-        </button>
-
-        <!-- Footer section -->
-        <footer class="mt-8 text-sm text-slate-400">
-            &copy; 2025 InnoCreatre. Project KiWI. All rights reserved.
-        </footer>
     </div>
 
-    <!-- More Info Modal -->
-    <div id="modal" class="modal fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-8 sm:p-10 rounded-3xl z-20 max-w-2xl w-full">
-        <button id="close-modal-btn" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition-colors">
-            <i class="ph-bold ph-x text-2xl"></i>
-        </button>
-        <h3 class="text-3xl font-bold mb-4 title-gradient">Project KiWI: Our Mission</h3>
-        <p class="text-lg text-slate-700 mb-6">
-            Project KiWI is more than a platform; it's a movement to redefine agriculture. We are building a decentralized ecosystem that empowers farmers with cutting-edge technology and gives consumers direct access to fresh, local produce.
+    <!-- AI Chatbot UI -->
+    <div id="ai-avatar-container" class="relative z-50">
+        <canvas id="ai-avatar-canvas" class="w-full h-full rounded-full"></canvas>
+    </div>
+
+    <!-- AI Dialogue Panel (Drag-and-drop enabled) -->
+    <div id="ai-dialogue" class="glass-panel z-50 rounded-2xl">
+        <p id="ai-message" class="text-slate-800"></p>
+        <div class="absolute top-2 left-2 text-slate-500 text-xs">
+            <i class="ph ph-hand-palm"></i>
+        </div>
+    </div>
+
+    <!-- Hidden Easter Egg -->
+    <div id="easter-egg-container" class="fixed inset-0 z-40 bg-black opacity-0 transition-opacity duration-1000 pointer-events-none">
+        <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-3xl font-bold">
+            Project KiWI: Origin Acknowledged. Access Granted.
         </p>
-        <ul class="text-left text-slate-600 space-y-4">
-            <li class="flex items-start">
-                <i class="ph ph-sparkle-fill text-xl text-yellow-500 mr-3 mt-1"></i>
-                <div>
-                    <h4 class="font-bold text-lg text-slate-800">Intelligent Insights</h4>
-                    <p class="text-sm text-slate-500">AI-powered analytics provide real-time data on soil health, weather patterns, and crop yields to optimize farming practices.</p>
-                </div>
-            </li>
-            <li class="flex items-start">
-                <i class="ph ph-leaf-fill text-xl text-green-500 mr-3 mt-1"></i>
-                <div>
-                    <h4 class="font-bold text-lg text-slate-800">Sustainable Practices</h4>
-                    <p class="text-sm text-slate-500">Our platform promotes eco-friendly methods and reduces food waste by connecting farmers directly to their markets.</p>
-                </div>
-            </li>
-            <li class="flex items-start">
-                <i class="ph ph-hands-clapping-fill text-xl text-indigo-500 mr-3 mt-1"></i>
-                <div>
-                    <h4 class="font-bold text-lg text-slate-800">Community-Driven</h4>
-                    <p class="text-sm text-slate-500">We believe in a farmer-first approach, ensuring fair pricing and a supportive community for all participants.</p>
-                </div>
-            </li>
-        </ul>
     </div>
- 
+
     <script>
         window.onload = function() {
-            // Get elements
-            const preloader = document.getElementById('preloader');
+            // --- Global State ---
+            let isDragging = false;
+            let dragTarget = null;
+            let offset = { x: 0, y: 0 };
+
+            // --- Three.js Setup for Main Scene ---
+            const mainCanvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+            const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            camera.position.z = 15;
+            camera.lookAt(0, 0, 0); // Camera looks at the center of the scene
+
+            // --- AI Avatar Setup ---
+            const aiCanvas = document.getElementById('ai-avatar-canvas');
+            const aiScene = new THREE.Scene();
+            const aiCamera = new THREE.PerspectiveCamera(75, 80 / 80, 0.1, 100);
+            aiCamera.position.z = 5;
+            const aiRenderer = new THREE.WebGLRenderer({ canvas: aiCanvas, antialias: true, alpha: true });
+            aiRenderer.setSize(80, 80);
+
+            // --- AI Avatar Object: A pulsating, multi-layered sphere ---
+            const aiGeometry = new THREE.IcosahedronGeometry(1.5, 2);
+            const aiMaterial = new THREE.MeshStandardMaterial({
+                color: 0x4ade80,
+                emissive: 0x4ade80,
+                emissiveIntensity: 0.8,
+                metalness: 0.9,
+                roughness: 0.1
+            });
+            const aiAvatar = new THREE.Mesh(aiGeometry, aiMaterial);
+            aiScene.add(aiAvatar);
+            
+            // AI Avatar Light
+            const aiLight = new THREE.PointLight(0x4ade80, 2, 50);
+            aiLight.position.set(0, 0, 5);
+            aiScene.add(aiLight);
+            
+            // --- Scene Elements ---
+            // Particle System (Neural Network)
+            const particleCount = 2000;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = [];
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 50;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+                velocities.push({
+                    x: (Math.random() - 0.5) * 0.02,
+                    y: (Math.random() - 0.5) * 0.02,
+                    z: (Math.random() - 0.5) * 0.02
+                });
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0x4ade80, /* Green particles */
+                size: 0.1,
+                sizeAttenuation: true,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.5
+            });
+            const particles = new THREE.Points(particlesGeometry, particleMaterial);
+            scene.add(particles);
+
+            // --- Lighting and Effects ---
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+            
+            // Cursor-following light (simulates holographic light shift)
+            const cursorLight = new THREE.PointLight(0xffffff, 1, 100);
+            scene.add(cursorLight);
+
+            // --- Animation Variables ---
+            let aiPulse = 0;
             const mainContent = document.getElementById('main-content');
-            const moreInfoBtn = document.getElementById('more-info-btn');
-            const modal = document.getElementById('modal');
-            const closeModalBtn = document.getElementById('close-modal-btn');
+            const preloader = document.getElementById('preloader');
+            const aiDialogue = document.getElementById('ai-dialogue');
+            const aiMessage = document.getElementById('ai-message');
+            const mainTitle = document.getElementById('main-title');
+            let titleClickCount = 0;
 
-            // Set up Three.js after a short delay to show the preloader
-            setTimeout(() => {
-                // Three.js setup
-                const canvas = document.getElementById('three-canvas');
-                const scene = new THREE.Scene();
-                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            // --- Time-of-day Adaptive Palette ---
+            const updatePalette = () => {
+                const hour = new Date().getHours();
+                const rendererColor = new THREE.Color();
+                if (hour >= 6 && hour < 12) { // Dawn
+                    rendererColor.setHex(0xDAF0E5); // Light green background
+                } else if (hour >= 12 && hour < 18) { // Noon
+                    rendererColor.setHex(0xF7F8F9); // Default off-white
+                } else { // Dusk/Night
+                    rendererColor.setHex(0xE0F7E0); // Slightly darker green
+                }
+                scene.background = rendererColor;
+                renderer.setClearColor(rendererColor, 1);
+            };
+            updatePalette();
 
+            // --- Animation Loop ---
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                // Animate particles
+                const positions = particles.geometry.attributes.position.array;
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] += velocities[i].x;
+                    positions[i * 3 + 1] += velocities[i].y;
+                    positions[i * 3 + 2] += velocities[i].z;
+
+                    if (Math.abs(positions[i * 3]) > 25) velocities[i].x *= -1;
+                    if (Math.abs(positions[i * 3 + 1]) > 25) velocities[i].y *= -1;
+                    if (Math.abs(positions[i * 3 + 2]) > 25) velocities[i].z *= -1;
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+
+                // Animate AI avatar
+                aiPulse += 0.05;
+                aiAvatar.rotation.x += 0.01;
+                aiAvatar.rotation.y += 0.005;
+                aiAvatar.scale.setScalar(1 + Math.sin(aiPulse) * 0.1);
+                aiRenderer.render(aiScene, aiCamera);
+                
+                renderer.render(scene, camera);
+            };
+
+            // --- Event Listeners and Interactions ---
+            const cursorGlow = document.getElementById('cursor-glow');
+            document.addEventListener('mousemove', (e) => {
+                // Update cursor glow position
+                cursorGlow.style.left = `${e.clientX}px`;
+                cursorGlow.style.top = `${e.clientY}px`;
+
+                // Update camera parallax effect
+                const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                camera.position.x = mouseX * 2;
+                camera.position.y = mouseY * 2;
+                camera.lookAt(0, 0, 0);
+
+                // Update cursor-following light
+                const vector = new THREE.Vector3(mouseX, mouseY, 0.5);
+                vector.unproject(camera);
+                const dir = vector.sub(camera.position).normalize();
+                const distance = -camera.position.z / dir.z;
+                const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+                cursorLight.position.copy(pos);
+            });
+
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                camera.position.z = 8;
-
-                // --- Central Core object ---
-                const coreGeometry = new THREE.IcosahedronGeometry(2, 1);
-                const coreMaterial = new THREE.MeshStandardMaterial({
-                    color: 0x3b82f6,
-                    emissive: 0x3b82f6,
-                    emissiveIntensity: 0.5,
-                    metalness: 0.8,
-                    roughness: 0.3
-                });
-                const core = new THREE.Mesh(coreGeometry, coreMaterial);
-                scene.add(core);
-
-                // --- Network of particles ---
-                const particleCount = 400;
-                const particlePositions = new Float32Array(particleCount * 3);
-                const particleVelocities = [];
-                const particleSizes = new Float32Array(particleCount);
-                const particleColors = new Float32Array(particleCount * 3);
-                
-                for (let i = 0; i < particleCount; i++) {
-                    const x = (Math.random() - 0.5) * 40;
-                    const y = (Math.random() - 0.5) * 40;
-                    const z = (Math.random() - 0.5) * 40;
-                    particlePositions[i * 3] = x;
-                    particlePositions[i * 3 + 1] = y;
-                    particlePositions[i * 3 + 2] = z;
-
-                    particleVelocities.push({
-                        x: (Math.random() - 0.5) * 0.01,
-                        y: (Math.random() - 0.5) * 0.01,
-                        z: (Math.random() - 0.5) * 0.01
-                    });
-                    
-                    particleSizes[i] = Math.random() * 0.2 + 0.1;
-                    
-                    const color = new THREE.Color(0x4ade80).multiplyScalar(Math.random() * 0.5 + 0.5);
-                    particleColors[i * 3] = color.r;
-                    particleColors[i * 3 + 1] = color.g;
-                    particleColors[i * 3 + 2] = color.b;
+            });
+            
+            // --- Drag-and-drop for AI Dialogue Panel ---
+            aiDialogue.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                dragTarget = aiDialogue;
+                const rect = dragTarget.getBoundingClientRect();
+                offset.x = e.clientX - rect.left;
+                offset.y = e.clientY - rect.top;
+            });
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                dragTarget = null;
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && dragTarget) {
+                    dragTarget.style.left = `${e.clientX - offset.x}px`;
+                    dragTarget.style.top = `${e.clientY - offset.y}px`;
                 }
+            });
 
-                const particleGeometry = new THREE.BufferGeometry();
-                particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-                particleGeometry.setAttribute('size', new THREE.BufferAttribute(particleSizes, 1));
-                particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-
-                const particleMaterial = new THREE.PointsMaterial({
-                    size: 0.1,
-                    sizeAttenuation: true,
-                    vertexColors: true,
-                    blending: THREE.AdditiveBlending,
-                    transparent: true
-                });
-                const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-                scene.add(particleSystem);
-                
-                // --- Animated connecting lines ---
-                const lineGeometry = new THREE.BufferGeometry();
-                const linePositions = new Float32Array(particleCount * 3 * 2 * 10); // Max 10 lines per particle
-                const lineMaterial = new THREE.LineBasicMaterial({
-                    color: 0x3b82f6,
-                    blending: THREE.AdditiveBlending,
-                    transparent: true,
-                    opacity: 0.2
-                });
-                const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-                scene.add(lines);
-
-                // --- Grid Helper for futuristic look ---
-                const gridHelper = new THREE.GridHelper(100, 100, 0x94a3b8, 0xe2e8f0);
-                gridHelper.material.opacity = 0.1;
-                gridHelper.material.transparent = true;
-                scene.add(gridHelper);
-
-                // --- Lighting ---
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-                scene.add(ambientLight);
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(5, 5, 5);
-                scene.add(directionalLight);
-
-                // --- Mouse Interaction ---
-                let mouseX = 0;
-                let mouseY = 0;
-
-                document.addEventListener('mousemove', (event) => {
-                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-                });
-                
-                // --- Animation loop ---
-                let pulse = 0;
-                const animate = () => {
-                    requestAnimationFrame(animate);
-
-                    // Update particles
-                    const particlePositionsAttribute = particleGeometry.attributes.position;
-                    for (let i = 0; i < particleCount; i++) {
-                        particlePositionsAttribute.array[i * 3] += particleVelocities[i].x;
-                        particlePositionsAttribute.array[i * 3 + 1] += particleVelocities[i].y;
-                        particlePositionsAttribute.array[i * 3 + 2] += particleVelocities[i].z;
-
-                        // Reverse direction if particle hits boundary
-                        if (particlePositionsAttribute.array[i * 3] > 20 || particlePositionsAttribute.array[i * 3] < -20) particleVelocities[i].x *= -1;
-                        if (particlePositionsAttribute.array[i * 3 + 1] > 20 || particlePositionsAttribute.array[i * 3 + 1] < -20) particleVelocities[i].y *= -1;
-                        if (particlePositionsAttribute.array[i * 3 + 2] > 20 || particlePositionsAttribute.array[i * 3 + 2] < -20) particleVelocities[i].z *= -1;
-                    }
-                    particlePositionsAttribute.needsUpdate = true;
+            // --- Easter Egg ---
+            mainTitle.addEventListener('click', () => {
+                titleClickCount++;
+                if (titleClickCount >= 5) {
+                    const eggContainer = document.getElementById('easter-egg-container');
+                    eggContainer.style.opacity = '1';
+                    setTimeout(() => {
+                        eggContainer.style.opacity = '0';
+                        titleClickCount = 0;
+                    }, 3000);
+                }
+            });
+            
+            // --- AI Chatbot Interaction Simulation ---
+            let aiActive = false;
+            document.getElementById('ai-avatar-container').addEventListener('click', async () => {
+                aiActive = !aiActive;
+                if (aiActive) {
+                    // Simulate AI voice response and gesture
+                    aiDialogue.style.opacity = '1';
+                    aiMessage.textContent = 'Hello, Human. How may I assist you today?';
                     
-                    // Animate core
-                    core.rotation.x += 0.0005;
-                    core.rotation.y += 0.001;
-                    core.position.y = Math.sin(pulse) * 0.2;
-                    pulse += 0.01;
+                    // Simulate LLM API call
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: "Introduce Project KiWI." }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-                    // Animate connecting lines
-                    let lineIndex = 0;
-                    for (let i = 0; i < particleCount; i++) {
-                        const p1 = new THREE.Vector3(particlePositionsAttribute.array[i * 3], particlePositionsAttribute.array[i * 3 + 1], particlePositionsAttribute.array[i * 3 + 2]);
-                        
-                        // Connect to nearby particles
-                        for (let j = i + 1; j < particleCount; j++) {
-                            const p2 = new THREE.Vector3(particlePositionsAttribute.array[j * 3], particlePositionsAttribute.array[j * 3 + 1], particlePositionsAttribute.array[j * 3 + 2]);
-                            const distance = p1.distanceTo(p2);
-
-                            if (distance < 5) {
-                                linePositions[lineIndex++] = p1.x;
-                                linePositions[lineIndex++] = p1.y;
-                                linePositions[lineIndex++] = p1.z;
-                                linePositions[lineIndex++] = p2.x;
-                                linePositions[lineIndex++] = p2.y;
-                                linePositions[lineIndex++] = p2.z;
-                            }
+                    try {
+                         const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await response.json();
+                        if (result.candidates && result.candidates.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            aiMessage.textContent = text;
+                        } else {
+                            aiMessage.textContent = "Error: Unable to generate response.";
                         }
+                    } catch (error) {
+                        console.error("API Call Failed:", error);
+                        aiMessage.textContent = "Connection lost. Please try again.";
                     }
-                    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-                    lineGeometry.attributes.position.needsUpdate = true;
-                    lines.geometry.setDrawRange(0, lineIndex / 3);
 
-                    // Camera follow mouse with smooth easing
-                    camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
-                    camera.position.y += (mouseY * 5 - camera.position.y) * 0.02;
-                    camera.lookAt(core.position);
+                } else {
+                    aiDialogue.style.opacity = '0';
+                }
+            });
 
-                    renderer.render(scene, camera);
-                };
-
-                // Handle window resizing
-                window.addEventListener('resize', () => {
-                    camera.aspect = window.innerWidth / window.innerHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                });
-                
-                // Start animation and hide preloader
-                animate();
+            // --- Initial loading sequence ---
+            setTimeout(() => {
+                animate(); // Start animation loop
                 preloader.classList.add('hidden');
                 mainContent.style.opacity = '1';
-                mainContent.style.transform = 'scale(1)';
-            }, 1000); // Simulate a slight loading time
-
-            // Modal functionality
-            moreInfoBtn.addEventListener('click', () => {
-                modal.classList.add('open');
-            });
-            closeModalBtn.addEventListener('click', () => {
-                modal.classList.remove('open');
-            });
+            }, 2000);
         };
     </script>
 </body>
