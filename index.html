@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aether think.</title>
-    
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Project KiWI</title>
+
+    <!-- Google Fonts: Inter for a modern, clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
  
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,53 +15,211 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        /* Gradient for the main title text */
+        .title-gradient {
+            background-image: linear-gradient(to right, #22c55e, #10b981, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Slideshow custom styles and animations */
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+        }
     </style>
 </head>
-<body class="bg-slate-50 flex items-center justify-center min-h-screen text-slate-900">
+<body class="bg-slate-50 text-slate-900 flex items-center justify-center min-h-screen p-4">
     <!-- Main content container -->
-    <div class="max-w-4xl w-full p-6 sm:p-10 text-center">
- 
+    <div class="max-w-5xl w-full p-6 sm:p-10 text-center bg-white rounded-3xl border border-slate-200 shadow-xl">
+
         <!-- Header section -->
-        <header class="mb-10 sm:mb-16">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-                aether think.
+        <header class="mb-12 sm:mb-16">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-4 title-gradient">
+                Project KiWI
             </h1>
-            <p class="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-                Connecting communities and cultivating a better future.
+            <p class="text-xl sm:text-2xl text-slate-600 max-w-3xl mx-auto mb-6">
+                Connecting Fields to the Future: Intelligent, Inclusive, and Sustainable Agriculture for Every Farmer.
+            </p>
+            <p class="text-base text-slate-500 max-w-3xl mx-auto">
+                Krishi Intelligence for Wellbeing & Infrastructure, a unified ecosystem modernizing farming through digital tools, AI-powered insights, and a farmer-first approach.
             </p>
         </header>
- 
+
         <!-- Main call-to-action buttons -->
-        <main>
+        <main class="mb-16">
+            <h2 class="text-xl sm:text-2xl font-bold mb-8 text-slate-900">Select your role to begin:</h2>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 w-full px-2">
                 
                 <!-- Consumer Button -->
                 <a href="https://krishisangam.odoo.com/"
-                   title="Go to Consumer Portal"
-                   class="w-full sm:w-1/2 md:w-auto flex flex-col items-center justify-center px-8 py-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out bg-white border border-slate-200 hover:scale-105">
-                    <span class="text-5xl mb-4" role="img" aria-label="Consumer Icon">🛍️</span>
+                    title="Go to Krishi Sangam (Consumer Portal)"
+                    class="w-full sm:w-1/2 flex flex-col items-center justify-center px-8 py-10 rounded-3xl transition-all duration-300 ease-in-out bg-white border-2 border-slate-200 shadow-lg hover:shadow-xl hover:border-teal-400 hover:scale-105">
+                    <span class="text-5xl mb-4 text-emerald-600" role="img" aria-label="Consumer Icon">🛍️</span>
                     <span class="text-xl sm:text-2xl font-bold">I'm a Consumer</span>
-                    <span class="block text-sm text-slate-500 mt-2">Find fresh, local produce.</span>
+                    <span class="block text-sm text-slate-500 mt-2">Discover and purchase local produce.</span>
                 </a>
- 
+
                 <!-- Farmer Button -->
                 <a href="https://krishidwaar.odoo.com/"
-                   title="Go to Farmer Portal"
-                   class="w-full sm:w-1/2 md:w-auto flex flex-col items-center justify-center px-8 py-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out bg-white border border-slate-200 hover:scale-105">
-                    <span class="text-5xl mb-4" role="img" aria-label="Farmer Icon">🚜</span>
+                    title="Go to Krishi Dwaar (Farmer Portal)"
+                    class="w-full sm:w-1/2 flex flex-col items-center justify-center px-8 py-10 rounded-3xl transition-all duration-300 ease-in-out bg-white border-2 border-slate-200 shadow-lg hover:shadow-xl hover:border-cyan-400 hover:scale-105">
+                    <span class="text-5xl mb-4 text-sky-600" role="img" aria-label="Farmer Icon">🚜</span>
                     <span class="text-xl sm:text-2xl font-bold">I'm a Farmer</span>
-                    <span class="block text-sm text-slate-500 mt-2">Sell your goods directly.</span>
+                    <span class="block text-sm text-slate-500 mt-2">Manage your farm and sell your goods directly.</span>
                 </a>
- 
             </div>
         </main>
         
+        <!-- Slideshow Section -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold mb-8 text-teal-600">The KiWI Ecosystem</h3>
+            <div class="relative w-full max-w-2xl mx-auto overflow-hidden rounded-2xl shadow-lg border border-slate-200 bg-white p-6 sm:p-8">
+                <!-- Slides Container -->
+                <div id="slideshow-container" class="relative h-64 flex items-center justify-center">
+                    
+                    <!-- Slide 1: Krishi Sangam -->
+                    <div class="slide absolute w-full h-full text-center p-4">
+                        <span class="text-5xl mb-4 block text-emerald-500">🌐</span>
+                        <h4 class="text-2xl font-bold mb-2">Krishi Sangam</h4>
+                        <p class="text-lg text-slate-600">Digital marketplace connecting farmers directly with buyers.</p>
+                    </div>
+
+                    <!-- Slide 2: Krishi Dwaar -->
+                    <div class="slide absolute w-full h-full text-center p-4">
+                        <span class="text-5xl mb-4 block text-sky-500">⚙️</span>
+                        <h4 class="text-2xl font-bold mb-2">Krishi Dwaar</h4>
+                        <p class="text-lg text-slate-600">Personalized dashboard for real-time, data-driven farming decisions.</p>
+                    </div>
+
+                    <!-- Slide 3: Krishi Yantra -->
+                    <div class="slide absolute w-full h-full text-center p-4">
+                        <span class="text-5xl mb-4 block text-indigo-500">🤖</span>
+                        <h4 class="text-2xl font-bold mb-2">Krishi Yantra</h4>
+                        <p class="text-lg text-slate-600">Autonomous seed sowing rover for increased accuracy and efficiency.</p>
+                    </div>
+
+                    <!-- Slide 4: Krishi Paryavaran -->
+                    <div class="slide absolute w-full h-full text-center p-4">
+                        <span class="text-5xl mb-4 block text-green-500">☀️</span>
+                        <h4 class="text-2xl font-bold mb-2">Krishi Paryavaran</h4>
+                        <p class="text-lg text-slate-600">IoT weather probe providing hyperlocal, real-time environmental data.</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <button onclick="changeSlide(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition-colors duration-300">
+                    <svg class="h-6 w-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button onclick="changeSlide(1)" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition-colors duration-300">
+                    <svg class="h-6 w-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+
+                <!-- Navigation Dots -->
+                <div class="flex justify-center mt-4 space-x-2">
+                    <span class="dot w-3 h-3 bg-gray-300 rounded-full cursor-pointer"></span>
+                    <span class="dot w-3 h-3 bg-gray-300 rounded-full cursor-pointer"></span>
+                    <span class="dot w-3 h-3 bg-gray-300 rounded-full cursor-pointer"></span>
+                    <span class="dot w-3 h-3 bg-gray-300 rounded-full cursor-pointer"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Pillars section -->
+        <section class="mt-16 border-t border-gray-200 pt-12">
+            <h3 class="text-2xl font-bold mb-8 text-teal-600">Our Core Pillars</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
+                <!-- Pillar 1: Intelligence -->
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="text-3xl mb-3 block text-teal-600">🧠</span>
+                    <h4 class="text-lg font-semibold mb-2">Intelligence</h4>
+                    <p class="text-sm text-slate-600">Turning data into actionable insights for smarter, more timely decisions.</p>
+                </div>
+                <!-- Pillar 2: Inclusivity -->
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="text-3xl mb-3 block text-cyan-600">🤝</span>
+                    <h4 class="text-lg font-semibold mb-2">Inclusivity</h4>
+                    <p class="text-sm text-slate-600">Making advanced technology accessible to every farmer, regardless of background.</p>
+                </div>
+                <!-- Pillar 3: Sustainability -->
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="text-3xl mb-3 block text-green-600">🌱</span>
+                    <h4 class="text-lg font-semibold mb-2">Sustainability</h4>
+                    <p class="text-sm text-slate-600">Promoting eco-friendly practices and efficient resource management.</p>
+                </div>
+                <!-- Pillar 4: Integration -->
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="text-3xl mb-3 block text-blue-600">🔗</span>
+                    <h4 class="text-lg font-semibold mb-2">Integration</h4>
+                    <p class="text-sm text-slate-600">Uniting hardware, software, and knowledge into one seamless ecosystem.</p>
+                </div>
+            </div>
+        </section>
+        
         <!-- Footer section -->
-        <footer class="mt-16 text-sm text-slate-400">
-            &copy; 2025 aether think. All rights reserved.
+        <footer class="mt-16 text-sm text-slate-500">
+            &copy; 2025 aether think. Project KiWI. All rights reserved.
         </footer>
     </div>
- 
+
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const slideshowContainer = document.getElementById('slideshow-container');
+        let slideshowInterval;
+
+        function showSlides() {
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+                dots[i].classList.remove('bg-gray-700');
+                dots[i].classList.add('bg-gray-300');
+            }
+            slides[slideIndex].classList.add('active');
+            dots[slideIndex].classList.remove('bg-gray-300');
+            dots[slideIndex].classList.add('bg-gray-700');
+        }
+
+        function changeSlide(n) {
+            slideIndex += n;
+            if (slideIndex >= slides.length) {
+                slideIndex = 0;
+            }
+            if (slideIndex < 0) {
+                slideIndex = slides.length - 1;
+            }
+            showSlides();
+            resetInterval();
+        }
+
+        function currentSlide(n) {
+            slideIndex = n;
+            showSlides();
+            resetInterval();
+        }
+        
+        function resetInterval() {
+            clearInterval(slideshowInterval);
+            slideshowInterval = setInterval(() => {
+                changeSlide(1);
+            }, 5000); // Change image every 5 seconds
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add click event listeners to dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => currentSlide(index));
+            });
+            showSlides();
+            resetInterval();
+        });
+    </script>
 </body>
 </html>
- 
